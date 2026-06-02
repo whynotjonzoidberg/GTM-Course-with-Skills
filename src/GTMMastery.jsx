@@ -39,6 +39,7 @@ export default function GTMMastery() {
   const [toolSearch, setToolSearch] = useState('');
   const [activeElement, setActiveElement] = useState(0);
   const [activeMotion, setActiveMotion] = useState('PLG');
+  const [activeAlignmentRole, setActiveAlignmentRole] = useState(0);
   const [storageReady, setStorageReady] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [skillContent, setSkillContent] = useState({});
@@ -93,7 +94,7 @@ export default function GTMMastery() {
     } catch (e) {}
   };
 
-  // ============ ELEMENTS (with deep-dive content) ============
+  // ============ ELEMENTS ============
   const elements = [
     {
       icon: Target, number: '01', title: 'ICP & Personas', tagline: "Know exactly who you're targeting", color: '#FF5C39',
@@ -124,10 +125,10 @@ export default function GTMMastery() {
           { name: 'Context', items: ['Walk me through your role and what a typical week looks like', 'What does success look like for you this quarter?', "What's the most painful part of [workflow] today?"] },
           { name: 'Trigger', items: ['What made you start looking for a solution?', 'What were you using before? Why did you stop?', "What would have happened if you didn't solve this?"] },
           { name: 'Decision', items: ['Walk me through who else was involved in the decision', 'What almost stopped you from buying?', 'How did you justify the spend internally?'] },
-          { name: 'Value', items: ['What does it let you do that you couldn\'t do before?', 'If we took it away tomorrow, what would you do?', 'How would you describe it to a peer?'] },
+          { name: 'Value', items: ["What does it let you do that you couldn't do before?", 'If we took it away tomorrow, what would you do?', 'How would you describe it to a peer?'] },
         ]
       },
-      sources: 'Pull from three places: customer interviews (qualitative truth), Gong call recordings (real objection language), and closed-won/closed-lost CRM data (patterns at scale). Triangulate, don\'t trust any single source.',
+      sources: "Pull from three places: customer interviews (qualitative truth), Gong call recordings (real objection language), and closed-won/closed-lost CRM data (patterns at scale). Triangulate, don't trust any single source.",
       prompt: `Act as a B2B product marketing manager. I'm building an ICP and persona for [PRODUCT]. My closed-won customers tend to share these traits: [LIST]. My best users are typically [ROLE] who care about [OUTCOME]. Help me draft: (1) an ICP with firmographics and disqualifiers, (2) a primary persona with goals, pains, watering holes, and exact phrases they use, (3) the top 5 interview questions I should ask next to validate this.`,
       resources: [
         { label: "Lenny's Newsletter: ICP frameworks", url: 'https://www.lennysnewsletter.com' },
@@ -201,10 +202,10 @@ export default function GTMMastery() {
         title: 'Cross-Functional Motion Alignment Worksheet',
         intro: 'Run this with PM, Sales, CS, and Marketing leads. Everyone has to agree on each row.',
         sections: [
-          { name: 'Product (PM owns)', items: ['What\'s our time-to-first-value target?', 'Are we building self-serve onboarding or sales-assisted demos?', 'Where do we gate features: free, paid, enterprise?'] },
-          { name: 'Sales (CRO owns)', items: ['Do we lead with PQLs or outbound?', 'What\'s the SDR role: qualifier or hunter?', 'When does an AE get involved?'] },
+          { name: 'Product (PM owns)', items: ["What's our time-to-first-value target?", 'Are we building self-serve onboarding or sales-assisted demos?', 'Where do we gate features: free, paid, enterprise?'] },
+          { name: 'Sales (CRO owns)', items: ['Do we lead with PQLs or outbound?', "What's the SDR role: qualifier or hunter?", 'When does an AE get involved?'] },
           { name: 'Marketing (CMO owns)', items: ['Where do we invest: SEO, paid, events, community?', 'What content do we owe sales vs. self-serve users?', 'How do we measure attribution across the motion?'] },
-          { name: 'CS (CCO owns)', items: ['Are we high-touch or tech-touch?', 'What triggers expansion conversations?', "How fast do we move customers from onboarding to value?"] },
+          { name: 'CS (CCO owns)', items: ['Are we high-touch or tech-touch?', 'What triggers expansion conversations?', 'How fast do we move customers from onboarding to value?'] },
         ]
       },
       sources: 'Align across departments by writing a one-page motion brief and getting sign-off from each functional leader. If even one function disagrees, the motion will not work.',
@@ -301,22 +302,51 @@ export default function GTMMastery() {
   const motions = {
     'PLG': { name: 'Product-Led Growth', acv: '< $5K ACV', color: '#7B5CFF', summary: 'The product itself is the primary acquisition, conversion, and expansion channel. Users discover value before ever talking to sales.', examples: 'Slack, Figma, Notion, Calendly, Canva', realExample: 'Slack: Free tier with 10K message history drove 500K+ signups. Freemium led to $1B+ ARR in 7 years.', strengths: ['Viral loops drive organic growth', 'Lower CAC', 'High scalability', 'Data-rich user behavior'], challenges: ['Requires strong product UX', 'Complex attribution', 'Harder to monetize enterprise'], pmmRole: 'Build in-product messaging, onboarding flows, upgrade prompts, and usage-based triggers.', alignment: 'Product owns activation. Marketing owns top-of-funnel and PQL signals. Sales activates only on high-intent product signals. CS focuses on adoption depth. All four agree on what defines a PQL.' },
     'SLG': { name: 'Sales-Led Growth', acv: '$50K+ ACV', color: '#FF5C39', summary: 'Sales reps drive the buying conversation from first touch through close. High-touch, high-consideration purchases.', examples: 'Salesforce, Workday, SAP, Snowflake (enterprise)', realExample: 'Salesforce built the SLG playbook: SDRs, AEs, and field sales drove them from startup to $30B+ revenue.', strengths: ['Higher ACVs', 'Strong customer relationships', 'Predictable revenue', 'Complex deals possible'], challenges: ['High CAC', 'Long sales cycles', 'Requires strong sales org', 'Slower to scale'], pmmRole: 'Build sales decks, battlecards, ROI calculators, and arm AEs with category-defining narratives.', alignment: 'Sales owns the pipeline number. Marketing owns the MQL number and feeds sales. Product builds for the customers sales closes. CS owns NRR and feeds back stories that close the next deal.' },
-    'Hybrid': { name: 'Hybrid Motion', acv: '$5K - $50K ACV', color: '#00B86B', summary: 'Product drives top-of-funnel and SMB conversion. Sales takes over for mid-market and enterprise expansion.', examples: 'Figma, Notion, HubSpot, Atlassian', realExample: 'HubSpot: Free CRM drove 500K+ signups. Sales converted high-intent users to paid tiers. $1.5B+ market cap.', strengths: ['Best of both worlds', 'Multiple revenue paths', 'Lower blended CAC', 'Land-and-expand built in'], challenges: ['Complex to operationalize', 'Sales/product tension', 'Requires sophisticated PQL scoring'], pmmRole: 'Define PQL criteria, build handoff playbooks, design upgrade prompts for self-serve to sales-assisted.', alignment: 'The hardest motion to align. Product, Sales, and Marketing must co-own the PQL definition and the handoff moment. If sales swoops in too early, you kill PLG; too late and you leave money on the table.' },
+    'Hybrid': {
+      name: 'Hybrid Motion', acv: '$5K - $50K ACV', color: '#00B86B',
+      summary: 'Product drives top-of-funnel and SMB conversion. Sales takes over for mid-market and enterprise expansion.',
+      examples: 'Figma, Notion, HubSpot, Atlassian',
+      realExample: 'HubSpot: Free CRM drove 500K+ signups. Sales converted high-intent users to paid tiers. $1.5B+ market cap.',
+      strengths: ['Best of both worlds', 'Multiple revenue paths', 'Lower blended CAC', 'Land-and-expand built in'],
+      challenges: ['Complex to operationalize', 'Sales/product tension', 'Requires sophisticated PQL scoring'],
+      pmmRole: 'Define PQL criteria, build handoff playbooks, design upgrade prompts for self-serve to sales-assisted.',
+      alignment: 'The hardest motion to align. Product, Sales, and Marketing must co-own the PQL definition and the handoff moment. If sales swoops in too early, you kill PLG; too late and you leave money on the table.',
+      deepDive: {
+        companyStory: {
+          name: 'Notion',
+          headline: 'They didn\'t choose Hybrid. Their customers forced them into it.',
+          phases: [
+            { year: '2016–2018', label: 'Pure PLG', color: '#7B5CFF', story: 'Notion launches with a radical bet: no sales team, no outbound. Just a product so good that individuals share it. The free tier spreads virally through design and startup communities. 500K users in two years, almost entirely organic.' },
+            { year: '2019–2020', label: 'The signal', color: '#FFB627', story: 'Something unexpected happens. IT admins start emailing in — not asking to buy, but asking for SSO, SCIM provisioning, and audit logs. Whole teams at Figma, Stripe, and Airbnb are already using Notion without IT\'s knowledge. Enterprise is knocking without being invited.' },
+            { year: '2021–2022', label: 'Hybrid pivot', color: '#00B86B', story: 'Notion builds an enterprise sales team for the first time. But crucially, they don\'t kill PLG — they layer sales on top. Individual users still self-serve. Sales only touches accounts showing enterprise signals: large team size, SSO requests, heavy usage. The PQL handoff becomes the most important process in the company.' },
+            { year: '2023+', label: 'Full motion', color: '#FF5C39', story: 'Notion hits a $10B valuation. PLG drives 40%+ of new logos (SMB and mid-market self-serve). Sales handles enterprise expansion. The two motions don\'t compete — they feed each other. Every enterprise deal started as a PLG user.' },
+          ]
+        },
+        checklist: [
+          { decision: 'Define your PQL threshold', detail: 'What product behaviors predict enterprise readiness? Team size, SSO requests, feature depth — not vanity events like "logged in 3 times."' },
+          { decision: 'Design the handoff architecture', detail: 'Who routes the account? What context transfers to sales? How does the customer experience stay seamless when the motion shifts?' },
+          { decision: 'Price across two motions', detail: 'Self-serve pricing and enterprise pricing are different products. Your packaging must let individuals start free and enterprises buy at scale without a pricing cliff.' },
+          { decision: 'Align comp plans', detail: 'If sales reps get commission on self-serve accounts they didn\'t touch, your PLG motion dies. Define clear sourcing rules before day one.' },
+          { decision: 'Build motion-specific metrics', detail: 'PLG tracks activation rate and time-to-value. SLG tracks pipeline coverage and win rate. You need both dashboards, not one blended number.' },
+        ]
+      }
+    },
     'Partner': { name: 'Partner-Led Growth', acv: 'Varies', color: '#FFB627', summary: 'Channel partners, integrations, and ecosystems drive the majority of new customer acquisition.', examples: 'Shopify, AWS Marketplace, Stripe', realExample: "Shopify's app ecosystem and agency partners drive more than half of merchant acquisition and retention.", strengths: ['Scalable distribution', 'Lower direct CAC', 'Geographic expansion', 'Implicit endorsement'], challenges: ['Less control over experience', 'Partner enablement is heavy', 'Margin sharing'], pmmRole: 'Build partner enablement, co-marketing campaigns, and incentive programs that align partner economics.', alignment: 'A dedicated partnerships function owns the channel. Marketing produces co-brandable assets. Product builds partner APIs and SDKs. Sales gets credit for partner-sourced deals or the motion collapses.' }
   };
 
-  // ============ TOOLS (with how-to-use) ============
+  // ============ TOOLS ============
   const tools = [
     { name: 'Dovetail', category: 'Research', tier: 'Essential', desc: 'Customer research repository & synthesis', stat: '2K+ teams', cost: 100, howTo: 'Record every customer interview, tag insights by theme (pain, gain, language), and link clips to your messaging house. The unfair advantage: when you write copy, you quote real customers verbatim.', url: 'https://dovetail.com' },
     { name: 'Wynter', category: 'Messaging', tier: 'Essential', desc: 'B2B message testing with real buyers', stat: '500+ tests/month', cost: 200, howTo: 'Test homepage hero, pricing page positioning, and email subject lines BEFORE you publish. Aim for 70%+ message-resonance scores. Anything below 50% means rewrite.', url: 'https://wynter.com' },
+    { name: 'Perplexity', category: 'Validation', tier: 'Essential', desc: 'Real-time market & competitive intelligence', stat: '10M+ users', cost: 20, howTo: 'Use Perplexity to validate ICP assumptions, check competitor positioning in real-time, and surface analyst opinions before a launch. Ask it "what are buyers in [category] saying about [problem]" to pressure-test your messaging before Wynter testing.', url: 'https://perplexity.ai' },
     { name: 'Gong', category: 'Analytics', tier: 'Essential', desc: 'Sales call intelligence & win/loss insights', stat: '10K+ customers', cost: 150, howTo: 'Search calls for competitor names, objection patterns, and exact customer phrases. Build a Gong tracker for every new launch to monitor how sales is actually pitching it.', url: 'https://www.gong.io' },
     { name: 'Notion', category: 'Collaboration', tier: 'Essential', desc: 'GTM docs, messaging house, launch briefs', stat: '10M+ users', cost: 20, howTo: 'Build a single GTM home: messaging house, launch tier system, persona library, and competitive intel. One link in your bio, every rep bookmarks it.', url: 'https://notion.so' },
     { name: 'Highspot', category: 'Enablement', tier: 'Advanced', desc: 'Sales enablement & content management', stat: 'Enterprise-focused', cost: 400, howTo: 'Replace "asset request" Slack threads. Tag every asset by stage, persona, and segment. Track which content reps actually use vs. ignore.', url: 'https://www.highspot.com' },
     { name: 'Seismic', category: 'Enablement', tier: 'Advanced', desc: 'Enterprise sales enablement platform', stat: '$500M+ ARR', cost: 500, howTo: 'For enterprise teams, Seismic lets you auto-customize pitch decks per opportunity. Worth it once you have 50+ reps.', url: 'https://seismic.com' },
     { name: 'Ahrefs', category: 'Research', tier: 'Essential', desc: 'SEO and competitive content analysis', stat: '1M+ users', cost: 200, howTo: 'Reverse-engineer what content your competitors rank for. Find their top pages, identify gaps, and out-build them on the highest-intent keywords.', url: 'https://ahrefs.com' },
     { name: 'Semrush', category: 'Research', tier: 'Essential', desc: 'Market intelligence & keyword research', stat: '10M+ users', cost: 130, howTo: 'Track keyword movements over time. Spot a competitor losing rankings? Investigate why and steal the position.', url: 'https://semrush.com' },
-    { name: 'Crayon', category: 'Research', tier: 'Advanced', desc: 'Competitive intelligence tracking', stat: '500+ enterprise customers', cost: 300, howTo: 'Set up alerts for competitor pricing pages, product launches, and exec hires. Feed insights into monthly battlecard updates.', url: 'https://www.crayon.co' },
-    { name: 'Klue', category: 'Research', tier: 'Advanced', desc: 'Competitive battlecard management', stat: '300+ customers', cost: 250, howTo: 'Live battlecards that update automatically. Reps can pull a card mid-call without leaving Salesforce. Game-changer for high-velocity sales teams.', url: 'https://klue.com' },
+    { name: 'Crayon', category: 'Validation', tier: 'Advanced', desc: 'Competitive intelligence tracking', stat: '500+ enterprise customers', cost: 300, howTo: 'Set up alerts for competitor pricing pages, product launches, and exec hires. Feed insights into monthly battlecard updates. Use alongside Perplexity for real-time + structured competitive intel.', url: 'https://www.crayon.co' },
+    { name: 'Klue', category: 'Validation', tier: 'Advanced', desc: 'Competitive battlecard management', stat: '300+ customers', cost: 250, howTo: 'Live battlecards that update automatically. Reps can pull a card mid-call without leaving Salesforce. Game-changer for high-velocity sales teams.', url: 'https://klue.com' },
     { name: 'HubSpot', category: 'Analytics', tier: 'Essential', desc: 'CRM, email marketing, pipeline tracking', stat: '200K+ customers', cost: 100, howTo: 'For SMB and mid-market, HubSpot is the easiest way to connect marketing campaigns to pipeline. Set up campaign attribution from day one.', url: 'https://hubspot.com' },
     { name: 'Salesforce', category: 'Analytics', tier: 'Advanced', desc: 'Enterprise CRM & revenue operations', stat: '$35B+ market cap', cost: 300, howTo: 'For enterprise. Partner with RevOps to build dashboards showing pipeline by campaign, segment, and persona. PMM lives in Salesforce reports.', url: 'https://salesforce.com' },
     { name: 'Figma', category: 'Collaboration', tier: 'Essential', desc: 'Visual assets, decks, design collaboration', stat: '4M+ users', cost: 15, howTo: 'Build your master deck once in Figma, then duplicate per launch. FigJam for workshops with sales and product on messaging.', url: 'https://figma.com' },
@@ -325,7 +355,7 @@ export default function GTMMastery() {
     { name: 'Amplitude', category: 'Analytics', tier: 'Advanced', desc: 'Product analytics & user behavior', stat: '5K+ customers', cost: 250, howTo: 'For PLG motions, Amplitude shows you which features drive activation and upgrade. PMM partners with product on aha-moment definition.', url: 'https://amplitude.com' },
   ];
 
-  const categories = ['All', 'Research', 'Messaging', 'Enablement', 'Analytics', 'Collaboration'];
+  const categories = ['All', 'Research', 'Messaging', 'Validation', 'Enablement', 'Analytics', 'Collaboration'];
   const tiers = ['All', 'Essential', 'Advanced'];
 
   const filteredTools = useMemo(() => {
@@ -361,7 +391,7 @@ export default function GTMMastery() {
     { title: 'Neglect internal enablement', body: "Your sales and CS teams are your army. If they can't articulate the value, no one can.", proof: 'Gong data: Sales teams with 90%+ messaging certification close 2x more deals.' },
   ];
 
-  // ============ CHECKLIST (with AI prompts per item) ============
+  // ============ CHECKLIST ============
   const checklist = [
     { phase: 'T-8 WEEKS', title: 'Strategy & Research', color: '#7B5CFF', items: [
       { text: 'ICP & personas defined and validated with customer interviews', prompt: "Help me build an ICP and primary persona for [PRODUCT]. I've talked to [N] customers. Here's the raw notes: [PASTE]. Synthesize: firmographics, top 3 pains in their words, top 3 outcomes they care about, and the 5 most quoted phrases I should lift into messaging." },
@@ -374,8 +404,8 @@ export default function GTMMastery() {
       { text: 'Launch brief distributed to all stakeholders', prompt: 'Write a one-page launch brief for [PRODUCT/FEATURE]. Audience: cross-functional GTM team. Include: what it is, why now, target persona, key message, success metrics, timeline, and the top 3 risks. Tone: punchy and clear.' },
       { text: 'Sales deck & battlecard created', prompt: 'Draft a 10-slide sales deck for [PRODUCT] selling into [ICP]. Structure: hook, problem, current alternatives, our approach, proof points, pricing/packaging, next steps. Then build a battlecard against [TOP COMPETITOR] for the [SEGMENT] segment.' },
       { text: 'Website copy written and in staging', prompt: 'Write a homepage hero, three-pillar section, social proof section, and CTA for [PRODUCT]. Target persona: [ROLE]. Core message: [MESSAGE]. Tone: confident, specific, no jargon. Provide 3 alternative hero headlines I can A/B test.' },
-      { text: 'Email sequences drafted and reviewed', prompt: 'Draft a 5-email sequence for [PERSONA] who signed up but hasn\'t activated. Goals: drive them to the aha moment of [FEATURE]. Tone: helpful, brief, one CTA per email. Include subject lines and a one-sentence summary of each.' },
-      { text: 'Blog post and social content ready', prompt: 'Write a 1,200-word launch announcement blog for [PRODUCT]. Structure: hook (a customer story), problem context, our solution, how it works, what\'s next. Then draft 5 LinkedIn posts and 3 tweets to amplify it.' },
+      { text: 'Email sequences drafted and reviewed', prompt: "Draft a 5-email sequence for [PERSONA] who signed up but hasn't activated. Goals: drive them to the aha moment of [FEATURE]. Tone: helpful, brief, one CTA per email. Include subject lines and a one-sentence summary of each." },
+      { text: 'Blog post and social content ready', prompt: "Write a 1,200-word launch announcement blog for [PRODUCT]. Structure: hook (a customer story), problem context, our solution, how it works, what's next. Then draft 5 LinkedIn posts and 3 tweets to amplify it." },
       { text: 'Demo script updated with new messaging', prompt: 'Update our demo script for [PRODUCT] to lead with [NEW MESSAGE]. Structure: discovery questions (3), demo flow (in order of "wow"), objection handlers (3), close. Keep total demo to 25 minutes with time for questions.' },
     ]},
     { phase: 'T-2 WEEKS', title: 'Internal Readiness', color: '#FFB627', items: [
@@ -407,13 +437,68 @@ export default function GTMMastery() {
   const completedItems = Object.values(checklistState).filter(Boolean).length;
   const progressPct = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
-  // ============ CROSS-FUNCTIONAL ALIGNMENT (new section) ============
+  // ============ CROSS-FUNCTIONAL ALIGNMENT — TAB VERSION ============
   const alignmentRoles = [
-    { role: 'Product Manager', color: '#7B5CFF', owns: 'What we build and when', pmmRelationship: 'PMM is PM\'s closest partner. PMM brings the market truth, PM brings the build reality.', alignmentMoves: ['Weekly sync on roadmap and messaging', 'Co-own the launch tier classification', 'Share customer interview notes in real-time', 'Joint Gong call reviews monthly'], friction: 'PM wants to ship more features. PMM wants to nail positioning before shipping. Resolve by tying features to messaging pillars upfront.' },
-    { role: 'Sales / CRO', color: '#FF5C39', owns: 'Pipeline and revenue', pmmRelationship: 'PMM\'s most important customer. If sales can\'t pitch it, it didn\'t launch.', alignmentMoves: ['Enable 2+ weeks before launch with role-play', 'Live in Gong: listen to 5 calls/week minimum', 'Office hours weekly for deal support', 'Co-own win/loss analysis'], friction: 'Sales wants more leads. PMM wants better-qualified leads. Resolve by jointly defining the MQL/SQL definition every quarter.' },
-    { role: 'Customer Success', color: '#00B86B', owns: 'Retention and expansion', pmmRelationship: 'The early warning system for messaging gaps and the source of expansion stories.', alignmentMoves: ['Monthly CS-to-PMM insight syncs', 'CS feeds case studies for messaging', 'PMM trains CS on expansion talking points', 'Co-own NPS analysis'], friction: 'CS gets blamed for churn caused by misaligned positioning. Resolve by including CS in messaging reviews before launch.' },
-    { role: 'Marketing / CMO', color: '#FFB627', owns: 'Demand and brand', pmmRelationship: 'Marketing executes the demand engine. PMM owns the message that engine carries.', alignmentMoves: ['Co-own the messaging house', 'PMM briefs every campaign with persona and message angle', 'Joint review of paid creative before launch', 'Quarterly content calendar alignment'], friction: 'Marketing optimizes for clicks. PMM optimizes for pipeline. Resolve by tying every campaign metric to a pipeline outcome.' },
-    { role: 'Executive Team', color: '#FF3E7F', owns: 'Strategy and resourcing', pmmRelationship: 'PMM is the strategic narrator for the company. Exec team needs PMM\'s market view.', alignmentMoves: ['Monthly market briefing to leadership', 'Quarterly category positioning review', 'Bring competitive intel to board meetings', 'Own the company narrative arc'], friction: 'Exec team wants growth at all costs. PMM knows positioning shifts take time. Resolve by setting messaging maturity milestones, not just revenue targets.' },
+    {
+      role: 'Product Manager', color: '#7B5CFF', owns: 'What we build and when',
+      story: 'The PMM-PM relationship is the most important partnership in the company. PM brings the build reality. PMM brings the market truth. When it works, roadmap decisions are grounded in real buyer pain, not assumptions. When it breaks, you ship features nobody wanted and message outcomes nobody cares about.',
+      howToWin: [
+        'Share customer interview notes in real-time — don\'t wait for a monthly summary',
+        'Co-own launch tier classification so resourcing matches market impact',
+        'Run joint Gong call reviews monthly so PM hears objections firsthand',
+        'Tie every roadmap item to a messaging pillar before prioritization'
+      ],
+      dontGoTooDeep: 'Don\'t get pulled into sprint planning or technical scoping. Your job is the "why" and "who." PM owns the "what" and "when." When you blur that line, both suffer.',
+      friction: 'PM wants to ship more features. PMM wants to nail positioning before shipping. Resolve by tying features to messaging pillars upfront — if a feature doesn\'t support a pillar, it\'s a roadmap conversation, not a messaging one.'
+    },
+    {
+      role: 'Sales / CRO', color: '#FF5C39', owns: 'Pipeline and revenue',
+      story: 'Sales is PMM\'s most demanding customer — and the most valuable feedback loop in the company. Every week reps are in front of real buyers hearing real objections. If you\'re not listening to those calls and feeding insights back into messaging, you\'re flying blind. The best PMMs treat sales like a distribution channel AND a research lab.',
+      howToWin: [
+        'Enable 2+ weeks before any launch — give reps time to internalize and practice',
+        'Live in Gong: listen to 5+ calls per week minimum, track new objection patterns',
+        'Run weekly office hours for deal support — show up before you\'re asked',
+        'Co-own win/loss analysis so you both learn from every closed deal'
+      ],
+      dontGoTooDeep: 'Don\'t become a sales support function that writes custom decks for every deal. That\'s not scalable and it trains reps to be helpless. Build systems, not one-offs.',
+      friction: 'Sales wants more leads. PMM wants better-qualified leads. Resolve by jointly defining the MQL/SQL definition every quarter and tying marketing metrics to pipeline, not impressions.'
+    },
+    {
+      role: 'Customer Success', color: '#00B86B', owns: 'Retention and expansion',
+      story: 'CS is the canary in the coal mine. When positioning is wrong, CS feels it first — in onboarding drop-off, support tickets, and churn conversations. The best PMMs treat CS as a structured feedback channel: monthly syncs, shared NPS analysis, and CS input on messaging before every launch. Miss this and you\'ll discover positioning gaps six months after they\'ve already cost you revenue.',
+      howToWin: [
+        'Run monthly CS-to-PMM insight syncs — structured, not ad hoc',
+        'Ask CS to flag when a customer\'s stated reason for buying doesn\'t match your messaging',
+        'Involve CS in messaging reviews before launch — they know what customers actually believe',
+        'Co-own NPS analysis and expansion trigger definition'
+      ],
+      dontGoTooDeep: 'Don\'t let CS pull PMM into individual account firefighting. Your job is to find the pattern across accounts and fix it at the source — in positioning, messaging, or enablement.',
+      friction: 'CS gets blamed for churn caused by misaligned positioning. Resolve by including CS in messaging reviews before launch and tracking "expectation gap" as a formal metric.'
+    },
+    {
+      role: 'Marketing / CMO', color: '#FFB627', owns: 'Demand and brand',
+      story: 'Marketing executes the demand engine that PMM fuels with messaging. The relationship breaks when PMM throws a messaging house over the wall and expects Marketing to figure it out — or when Marketing runs campaigns based on what they think sounds good, not what buyers actually respond to. The winning version: PMM briefs every campaign with persona, message angle, and success metric before a single asset is created.',
+      howToWin: [
+        'Brief every campaign in writing: persona, message angle, desired action, and how we\'ll measure it',
+        'Co-own the messaging house — update it together every quarter',
+        'Review paid creative before launch, not after — messaging drift starts there',
+        'Tie every campaign metric to a pipeline outcome, not a vanity number'
+      ],
+      dontGoTooDeep: 'Don\'t get pulled into campaign execution — writing ad copy, managing tools, or owning channels. PMM owns the strategy and the message. Marketing owns execution. Blurring this burns PMM bandwidth on work with low strategic leverage.',
+      friction: 'Marketing optimizes for clicks and impressions. PMM optimizes for pipeline quality. Resolve by agreeing on a shared metric — cost per qualified opportunity — that both teams are measured against.'
+    },
+    {
+      role: 'Executive Team', color: '#FF3E7F', owns: 'Strategy and resourcing',
+      story: 'The exec team sets the strategic context that PMM operates in — category decisions, pricing philosophy, major market bets. PMM\'s job is to be the strategic narrator who translates market reality into language execs can act on. Monthly market briefings, quarterly category reviews, and competitive intel at board meetings. Miss these and PMM becomes a tactical function rather than a strategic one.',
+      howToWin: [
+        'Deliver a monthly market briefing to leadership — competitive moves, win/loss patterns, recommended shifts',
+        'Own the company narrative arc and make sure it shows up in board decks',
+        'Bring competitive intel that changes decisions, not just awareness',
+        'Set messaging maturity milestones — not just revenue targets — so GTM quality is visible'
+      ],
+      dontGoTooDeep: 'Don\'t get swept into exec-level politics or become someone\'s internal advocate. Stay grounded in market data. Your credibility with leadership comes from being right about the market, not from being liked.',
+      friction: 'Exec team wants growth at all costs. PMM knows positioning shifts take time. Resolve by framing messaging changes as risk reduction: "rushing this positioning will cost us deals in the next 90 days."'
+    },
   ];
 
   const principles = [
@@ -426,38 +511,14 @@ export default function GTMMastery() {
 
   // ============ SKILLS LIBRARY ============
   const skills = [
-    { id: 'icp-builder', icon: Compass, title: 'ICP Builder', tagline: 'Turn research into a sharp Ideal Customer Profile', color: '#FF5C39', element: 'ICP & Personas',
-      input: 'Customer interviews, closed-won/lost data, sales intuition',
-      output: 'A structured ICP doc with firmographics, technographics, disqualifiers, and confidence calibration',
-      whenToUse: 'Pre-launch planning, refining ICP after a year of selling, diagnosing weak pipeline' },
-    { id: 'persona-generator', icon: Users, title: 'Persona Generator', tagline: 'Synthesize interviews into actionable personas', color: '#7B5CFF', element: 'ICP & Personas',
-      input: '5+ customer interview notes or transcripts',
-      output: 'A structured B2B persona with goals, pains in their own words, channels, and a quote bank',
-      whenToUse: 'After completing customer research, before writing copy, when building multi-persona GTM motions' },
-    { id: 'messaging-house', icon: Megaphone, title: 'Messaging House', tagline: 'Build promise + 3 pillars + proof points', color: '#00B86B', element: 'Positioning & Messaging',
-      input: 'Positioning statement, persona, top 3 alternatives, customer outcomes',
-      output: 'A complete messaging architecture with persona and channel variations, plus a test plan',
-      whenToUse: 'Pre-launch messaging development, annual refresh, when sales and marketing diverge' },
-    { id: 'battlecard-builder', icon: Swords, title: 'Battlecard Builder', tagline: 'Segment-specific competitive battlecards', color: '#FFB627', element: 'Sales Enablement',
-      input: 'Closed-lost data, Gong call snippets, competitor public materials',
-      output: 'A battlecard with wedges, honest gaps, objection handlers, and trap questions',
-      whenToUse: 'Pre-launch, after a string of losses, segment expansion, quarterly refresh' },
-    { id: 'launch-brief', icon: Rocket, title: 'Launch Brief Writer', tagline: 'One-page cross-functional alignment doc', color: '#FF3E7F', element: 'Cross-Functional',
-      input: 'Product details, launch tier, target persona, business case',
-      output: 'A complete launch brief with RACI, metrics, pre-mortem, and key dates',
-      whenToUse: 'T-8 weeks before any tiered launch, when cross-functional team is misaligned' },
-    { id: 'sales-deck', icon: Presentation, title: 'Sales Deck Drafter', tagline: '10-slide narrative-led pitch deck', color: '#7B5CFF', element: 'Sales Enablement',
-      input: 'Positioning, persona, top customer logos, outcomes with metrics',
-      output: 'A 10-slide deck following the proven "story-led selling" arc with speaker notes',
-      whenToUse: 'New launch, positioning shift, segment-specific deck needs, weak current pitch' },
-    { id: 'win-loss-interview', icon: Mic, title: 'Win/Loss Interviewer', tagline: 'Structured post-deal analysis', color: '#00B86B', element: 'Cross-Functional',
-      input: 'List of recent closed-won and closed-lost deals, customer contacts',
-      output: 'Interview questionnaires, recruitment templates, synthesis framework, and action recs',
-      whenToUse: 'T+30 post-launch, quarterly as a standing program, after losses to specific competitor' },
-    { id: 'gtm-motion-diagnostic', icon: GitBranch, title: 'GTM Motion Diagnostic', tagline: 'PLG vs. SLG vs. Hybrid vs. Partner fit', color: '#FF5C39', element: 'GTM Motion',
-      input: 'ACV, ICP, sales cycle, current motion, team setup',
-      output: 'Motion recommendation, red flags, cross-functional changes needed, 90-day plan',
-      whenToUse: 'Pre-launch strategy, current motion not working, after moving up or down market' },
+    { id: 'icp-builder', icon: Compass, title: 'ICP Builder', tagline: 'Turn research into a sharp Ideal Customer Profile', color: '#FF5C39', element: 'ICP & Personas', input: 'Customer interviews, closed-won/lost data, sales intuition', output: 'A structured ICP doc with firmographics, technographics, disqualifiers, and confidence calibration', whenToUse: 'Pre-launch planning, refining ICP after a year of selling, diagnosing weak pipeline' },
+    { id: 'persona-generator', icon: Users, title: 'Persona Generator', tagline: 'Synthesize interviews into actionable personas', color: '#7B5CFF', element: 'ICP & Personas', input: '5+ customer interview notes or transcripts', output: 'A structured B2B persona with goals, pains in their own words, channels, and a quote bank', whenToUse: 'After completing customer research, before writing copy, when building multi-persona GTM motions' },
+    { id: 'messaging-house', icon: Megaphone, title: 'Messaging House', tagline: 'Build promise + 3 pillars + proof points', color: '#00B86B', element: 'Positioning & Messaging', input: 'Positioning statement, persona, top 3 alternatives, customer outcomes', output: 'A complete messaging architecture with persona and channel variations, plus a test plan', whenToUse: 'Pre-launch messaging development, annual refresh, when sales and marketing diverge' },
+    { id: 'battlecard-builder', icon: Swords, title: 'Battlecard Builder', tagline: 'Segment-specific competitive battlecards', color: '#FFB627', element: 'Sales Enablement', input: 'Closed-lost data, Gong call snippets, competitor public materials', output: 'A battlecard with wedges, honest gaps, objection handlers, and trap questions', whenToUse: 'Pre-launch, after a string of losses, segment expansion, quarterly refresh' },
+    { id: 'launch-brief', icon: Rocket, title: 'Launch Brief Writer', tagline: 'One-page cross-functional alignment doc', color: '#FF3E7F', element: 'Cross-Functional', input: 'Product details, launch tier, target persona, business case', output: 'A complete launch brief with RACI, metrics, pre-mortem, and key dates', whenToUse: 'T-8 weeks before any tiered launch, when cross-functional team is misaligned' },
+    { id: 'sales-deck', icon: Presentation, title: 'Sales Deck Drafter', tagline: '10-slide narrative-led pitch deck', color: '#7B5CFF', element: 'Sales Enablement', input: 'Positioning, persona, top customer logos, outcomes with metrics', output: 'A 10-slide deck following the proven "story-led selling" arc with speaker notes', whenToUse: 'New launch, positioning shift, segment-specific deck needs, weak current pitch' },
+    { id: 'win-loss-interview', icon: Mic, title: 'Win/Loss Interviewer', tagline: 'Structured post-deal analysis', color: '#00B86B', element: 'Cross-Functional', input: 'List of recent closed-won and closed-lost deals, customer contacts', output: 'Interview questionnaires, recruitment templates, synthesis framework, and action recs', whenToUse: 'T+30 post-launch, quarterly as a standing program, after losses to specific competitor' },
+    { id: 'gtm-motion-diagnostic', icon: GitBranch, title: 'GTM Motion Diagnostic', tagline: 'PLG vs. SLG vs. Hybrid vs. Partner fit', color: '#FF5C39', element: 'GTM Motion', input: 'ACV, ICP, sales cycle, current motion, team setup', output: 'Motion recommendation, red flags, cross-functional changes needed, 90-day plan', whenToUse: 'Pre-launch strategy, current motion not working, after moving up or down market' },
   ];
 
   const navItems = [
@@ -524,23 +585,22 @@ export default function GTMMastery() {
             <div className="text-sm font-medium text-[#1A1A1A]/60">Go-to-Market Series</div>
           </div>
           <h1 className="font-display font-black text-6xl md:text-8xl lg:text-9xl leading-[0.9] mb-8">
-            Launch products<br/>
-            that <span className="italic" style={{ color: '#FF5C39' }}>actually</span><br/>
-            <span className="text-outline">win.</span>
+            The path to<br/>
+            GTM <span className="italic" style={{ color: '#FF5C39' }}>mastery</span><br/>
+            <span className="text-outline">is built.</span>
           </h1>
           <p className="text-xl md:text-2xl max-w-2xl mb-10 text-[#1A1A1A]/70 leading-relaxed">
-            The complete playbook for Product Marketing Managers. Frameworks, tools, do's and don'ts, AI prompts, and the metrics that move the business.
+            GTM mastery isn't a moment — it's a system you build and sharpen with every launch. The complete playbook for PMMs: frameworks, tools, AI prompts, and the metrics that move the business.
           </p>
           <div className="flex flex-wrap gap-4 mb-16">
             <button onClick={() => scrollTo('intro')} className="bg-[#1A1A1A] text-[#FFFAF0] px-8 py-4 rounded-full font-semibold hover:bg-[#FF5C39] transition-colors flex items-center gap-2">
-              Start Learning <ArrowRight className="w-4 h-4" />
+              Start the journey <ArrowRight className="w-4 h-4" />
             </button>
             <button onClick={() => scrollTo('checklist')} className="bg-transparent border-2 border-[#1A1A1A] px-8 py-4 rounded-full font-semibold hover:bg-[#1A1A1A] hover:text-[#FFFAF0] transition-colors">
               Jump to Checklist
             </button>
           </div>
 
-          {/* New stats: WHY launches fail, not just THAT they fail */}
           <div className="mb-4 text-xs font-bold tracking-wider opacity-60">WHY MOST LAUNCHES UNDERPERFORM</div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -574,6 +634,88 @@ export default function GTMMastery() {
           ))}
         </div>
       </div>
+
+      {/* IMPACT — moved up, vertical bar chart layout */}
+      <section id="impact" className="bg-[#1A1A1A] text-[#FFFAF0] py-24 border-b-2 border-[#1A1A1A]">
+        <div className="max-w-7xl mx-auto px-6">
+          <ModuleHeader num="00" label="The Stakes" title="What GTM mastery actually delivers" subtitle="Industry benchmarks comparing teams without a defined GTM system vs. teams running this playbook." dark />
+          <p className="text-xs opacity-40 mt-2 mb-16 font-mono">Sources: Forrester (2024), Gong (2024), OpenView PLG benchmarks (2024)</p>
+
+          {/* Legend */}
+          <div className="flex items-center gap-6 mb-8">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-sm bg-[#FF3E7F]/70"></div>
+              <span className="text-xs font-mono opacity-60">Without GTM system</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-sm bg-[#00B86B]"></div>
+              <span className="text-xs font-mono opacity-60">With GTM system</span>
+            </div>
+          </div>
+
+          {/* Vertical bar chart */}
+          <div className="grid grid-cols-5 gap-4 items-end">
+            {[
+              { name: 'Win Rate', without: 18, with: 32, unit: '%', max: 100, context: 'A 14-point lift — almost double the deals from the same pipeline.' },
+              { name: 'Sales Cycle', without: 95, with: 58, unit: ' days', max: 120, invert: true, context: '37 days faster per deal. More closes, same headcount.' },
+              { name: 'Pipeline Coverage', without: 2.1, with: 3.8, unit: 'x', max: 5, context: 'Above 3x is what boards expect for predictable revenue.' },
+              { name: 'Activation Rate', without: 24, with: 51, unit: '%', max: 100, context: 'Activation drives every downstream metric.' },
+              { name: 'Net Revenue Retention', without: 95, with: 118, unit: '%', max: 150, context: 'NRR above 110% means you grow without new logos.' },
+            ].map((m, i) => {
+              const delta = m.invert ? `${Math.round(((m.without - m.with) / m.without) * 100)}% faster` : `+${Math.round(((m.with - m.without) / m.without) * 100)}%`;
+              const positive = m.invert ? m.with < m.without : m.with > m.without;
+              const withoutHeight = Math.max(8, Math.round((m.without / m.max) * 200));
+              const withHeight = Math.max(8, Math.round((m.with / m.max) * 200));
+              return (
+                <div key={i} className="flex flex-col items-center gap-3">
+                  {/* Delta badge */}
+                  <div className="text-sm font-black" style={{ color: positive ? '#00B86B' : '#FF3E7F' }}>{delta}</div>
+                  {/* Bars */}
+                  <div className="w-full flex items-end justify-center gap-2" style={{ height: 220 }}>
+                    {/* Without bar */}
+                    <div className="flex flex-col items-center gap-1 flex-1">
+                      <span className="text-xs font-bold text-[#FFFAF0]/70">{m.without}{m.unit}</span>
+                      <div
+                        className="w-full rounded-t-lg bg-[#FF3E7F]/70"
+                        style={{ height: withoutHeight }}
+                      ></div>
+                    </div>
+                    {/* With bar */}
+                    <div className="flex flex-col items-center gap-1 flex-1">
+                      <span className="text-xs font-black" style={{ color: '#00B86B' }}>{m.with}{m.unit}</span>
+                      <div
+                        className="w-full rounded-t-lg bg-[#00B86B]"
+                        style={{ height: withHeight }}
+                      ></div>
+                    </div>
+                  </div>
+                  {/* Metric name */}
+                  <div className="text-center">
+                    <div className="font-display font-bold text-sm leading-tight mb-1">{m.name}</div>
+                    <p className="text-xs opacity-40 leading-snug hidden md:block">{m.context}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Context rows for mobile / full detail */}
+          <div className="mt-12 grid md:grid-cols-5 gap-4">
+            {[
+              { name: 'Win Rate', context: 'A 14-point lift means almost doubling closed-won deals from the same pipeline.' },
+              { name: 'Sales Cycle', context: '37 days faster means more deals per rep per year, same headcount.' },
+              { name: 'Pipeline Coverage', context: 'Coverage ratio above 3x is the threshold most boards expect for predictable revenue.' },
+              { name: 'Activation Rate', context: 'Activation drives every downstream metric: retention, expansion, advocacy.' },
+              { name: 'Net Revenue Retention', context: 'NRR above 110% means you grow even if you stop acquiring new logos.' },
+            ].map((m, i) => (
+              <div key={i} className="bg-[#FFFAF0]/5 border border-[#FFFAF0]/10 rounded-xl p-4">
+                <div className="font-semibold text-sm mb-1">{m.name}</div>
+                <p className="text-xs opacity-50 leading-relaxed">{m.context}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* MODULE 01 - INTRO */}
       <section id="intro" className="max-w-7xl mx-auto px-6 py-24">
@@ -649,8 +791,6 @@ export default function GTMMastery() {
                   </div>
                   <h3 className="font-display font-black text-4xl mb-4">{elements[activeElement].title}</h3>
                   <p className="text-lg mb-6 leading-relaxed">{elements[activeElement].detail}</p>
-
-                  {/* Comparison table */}
                   <div className="bg-[#FFFAF0] border-2 border-[#1A1A1A] rounded-2xl p-5 mb-6">
                     <div className="font-display font-bold text-lg mb-3">{elements[activeElement].compare.title}</div>
                     <div className="grid grid-cols-3 gap-2 pb-2 mb-2 border-b-2 border-[#1A1A1A]">
@@ -666,7 +806,6 @@ export default function GTMMastery() {
                       </div>
                     ))}
                   </div>
-
                   <div className="mb-6">
                     <div className="font-bold mb-3 text-sm tracking-wider opacity-60">KEY TIPS</div>
                     <ul className="space-y-2">
@@ -680,13 +819,10 @@ export default function GTMMastery() {
                       ))}
                     </ul>
                   </div>
-
                   <div className="bg-[#1A1A1A] text-[#FFFAF0] rounded-2xl p-5 mb-6">
                     <div className="text-xs font-bold tracking-wider opacity-50 mb-2">REAL EXAMPLE</div>
                     <p className="text-sm">{elements[activeElement].example}</p>
                   </div>
-
-                  {/* Drill-down button */}
                   <button onClick={() => setActiveModal({ type: 'element', element: elements[activeElement] })} className="w-full bg-[#1A1A1A] text-[#FFFAF0] rounded-2xl p-4 flex items-center justify-between hover:bg-[#FF5C39] transition-colors">
                     <div className="flex items-center gap-3">
                       <Layers className="w-5 h-5" />
@@ -710,7 +846,7 @@ export default function GTMMastery() {
         <div className="flex flex-wrap gap-2 mt-12 mb-8">
           {Object.keys(motions).map(m => (
             <button key={m} onClick={() => setActiveMotion(m)} className={`px-6 py-3 rounded-full font-semibold transition-all border-2 ${activeMotion === m ? 'bg-[#1A1A1A] text-[#FFFAF0] border-[#1A1A1A]' : 'bg-transparent border-[#1A1A1A]/20 hover:border-[#1A1A1A]'}`}>
-              {m}
+              {m}{m === 'Hybrid' && <span className="ml-2 text-xs bg-[#00B86B] text-[#1A1A1A] px-2 py-0.5 rounded-full font-bold">Deep Dive</span>}
             </button>
           ))}
         </div>
@@ -759,37 +895,118 @@ export default function GTMMastery() {
               </div>
             </div>
           </div>
+
+          {/* HYBRID DEEP DIVE */}
+          {activeMotion === 'Hybrid' && motions.Hybrid.deepDive && (
+            <div className="border-t-2 border-[#1A1A1A] p-8 md:p-12 bg-[#FFFAF0]">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="px-3 py-1 bg-[#00B86B] text-[#1A1A1A] rounded-full text-xs font-bold tracking-wider">DEEP DIVE</div>
+                <div className="font-display font-black text-2xl">The Notion Story</div>
+              </div>
+              <p className="text-lg font-semibold mb-8 max-w-2xl">{motions.Hybrid.deepDive.companyStory.headline}</p>
+
+              {/* Timeline */}
+              <div className="space-y-0 mb-12 relative">
+                <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-[#1A1A1A]/10"></div>
+                {motions.Hybrid.deepDive.companyStory.phases.map((phase, i) => (
+                  <div key={i} className="flex gap-6 pb-8 last:pb-0 relative">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-[#1A1A1A] flex items-center justify-center z-10" style={{ backgroundColor: phase.color }}>
+                      <span className="font-mono text-xs font-bold text-[#1A1A1A]">{i + 1}</span>
+                    </div>
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2 flex-wrap">
+                        <span className="font-mono text-xs font-bold opacity-50">{phase.year}</span>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-bold" style={{ backgroundColor: phase.color, color: '#1A1A1A' }}>{phase.label}</span>
+                      </div>
+                      <p className="text-sm leading-relaxed text-[#1A1A1A]/80">{phase.story}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 5-Decision Checklist */}
+              <div className="bg-[#1A1A1A] text-[#FFFAF0] rounded-3xl p-8">
+                <div className="font-display font-black text-2xl mb-2">The 5 decisions every Hybrid PMM must make</div>
+                <p className="text-sm opacity-60 mb-6">Before you run a Hybrid motion, each of these needs an owner and an answer.</p>
+                <div className="space-y-4">
+                  {motions.Hybrid.deepDive.checklist.map((item, i) => (
+                    <div key={i} className="flex gap-4 p-4 bg-[#FFFAF0]/5 rounded-2xl border border-[#FFFAF0]/10">
+                      <div className="w-8 h-8 rounded-full bg-[#00B86B] flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="font-mono text-xs font-black text-[#1A1A1A]">{i + 1}</span>
+                      </div>
+                      <div>
+                        <div className="font-semibold mb-1">{item.decision}</div>
+                        <p className="text-sm opacity-60 leading-relaxed">{item.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* MODULE 04 - CROSS-FUNCTIONAL ALIGNMENT (new) */}
+      {/* MODULE 04 - CROSS-FUNCTIONAL ALIGNMENT — TABS */}
       <section id="alignment" className="bg-[#7B5CFF] text-[#FFFAF0] py-24 border-y-2 border-[#1A1A1A]">
         <div className="max-w-7xl mx-auto px-6">
           <ModuleHeader num="04" label="The Hardest Part" title="Cross-Functional Alignment" subtitle="The best PMMs are the connective tissue. Here's how to align every function around your GTM." dark />
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-16">
+
+          {/* Tab buttons */}
+          <div className="flex flex-wrap gap-2 mt-12 mb-8">
             {alignmentRoles.map((r, i) => (
-              <div key={i} className="bg-[#1A1A1A] border-2 border-[#1A1A1A] rounded-3xl p-6 flex flex-col">
-                <div className="px-3 py-1 inline-block rounded-full text-xs font-bold mb-4 self-start" style={{ backgroundColor: r.color, color: '#1A1A1A' }}>{r.role}</div>
-                <div className="text-xs font-bold tracking-wider opacity-50 mb-1">THEY OWN</div>
-                <div className="font-display font-bold text-lg mb-4">{r.owns}</div>
-                <div className="text-xs font-bold tracking-wider opacity-50 mb-1">THE PMM RELATIONSHIP</div>
-                <p className="text-sm mb-4 opacity-80">{r.pmmRelationship}</p>
-                <div className="text-xs font-bold tracking-wider opacity-50 mb-2">ALIGNMENT MOVES</div>
-                <ul className="space-y-1 mb-4">
-                  {r.alignmentMoves.map((m, mi) => (
-                    <li key={mi} className="flex gap-2 text-xs"><Check className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: r.color }} strokeWidth={3} />{m}</li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-4 border-t border-[#FFFAF0]/10">
-                  <div className="text-xs font-bold tracking-wider opacity-50 mb-1">WHERE FRICTION SHOWS UP</div>
-                  <p className="text-xs opacity-70">{r.friction}</p>
-                </div>
-              </div>
+              <button key={i} onClick={() => setActiveAlignmentRole(i)}
+                className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all border-2 ${activeAlignmentRole === i ? 'bg-[#FFFAF0] text-[#1A1A1A] border-[#FFFAF0]' : 'bg-transparent border-[#FFFAF0]/30 text-[#FFFAF0] hover:border-[#FFFAF0]/60'}`}>
+                {r.role}
+              </button>
             ))}
           </div>
-          <div className="mt-12 bg-[#1A1A1A] rounded-3xl p-8 border-2 border-[#1A1A1A]">
-            <div className="font-display font-black text-2xl mb-3">The PMM's secret weapon: the GTM operating cadence</div>
-            <p className="opacity-80 mb-6">Alignment is not a one-time meeting. It's a ritual. The best PMMs run a weekly GTM sync (60 min), a monthly market briefing (30 min), and a quarterly category review (half day). Show up consistently and you become the room where decisions get made.</p>
+
+          {/* Active tab content */}
+          <div key={activeAlignmentRole} className="fade-up bg-[#1A1A1A] border-2 border-[#1A1A1A] rounded-3xl overflow-hidden">
+            <div className="p-8 md:p-10 border-b-2 border-[#FFFAF0]/10" style={{ borderLeftWidth: 6, borderLeftColor: alignmentRoles[activeAlignmentRole].color }}>
+              <div className="flex items-center gap-3 mb-4 flex-wrap">
+                <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: alignmentRoles[activeAlignmentRole].color, color: '#1A1A1A' }}>
+                  {alignmentRoles[activeAlignmentRole].role.toUpperCase()}
+                </div>
+                <div className="text-xs font-bold tracking-wider opacity-50">THEY OWN: {alignmentRoles[activeAlignmentRole].owns}</div>
+              </div>
+              <p className="text-base leading-relaxed opacity-90">{alignmentRoles[activeAlignmentRole].story}</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-0 divide-y-2 md:divide-y-0 md:divide-x-2 divide-[#FFFAF0]/10">
+              <div className="p-8">
+                <div className="text-xs font-bold tracking-wider mb-4" style={{ color: alignmentRoles[activeAlignmentRole].color }}>HOW TO WIN WITH THEM</div>
+                <ul className="space-y-3">
+                  {alignmentRoles[activeAlignmentRole].howToWin.map((m, mi) => (
+                    <li key={mi} className="flex gap-3 text-sm leading-relaxed">
+                      <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: alignmentRoles[activeAlignmentRole].color }} strokeWidth={3} />
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-8 flex flex-col gap-6">
+                <div>
+                  <div className="text-xs font-bold tracking-wider text-[#FF3E7F] mb-3">WHERE NOT TO GO TOO DEEP</div>
+                  <div className="bg-[#FF3E7F]/10 border border-[#FF3E7F]/30 rounded-2xl p-4">
+                    <p className="text-sm leading-relaxed opacity-90">{alignmentRoles[activeAlignmentRole].dontGoTooDeep}</p>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold tracking-wider opacity-50 mb-3">WHERE FRICTION SHOWS UP</div>
+                  <div className="bg-[#FFFAF0]/5 rounded-2xl p-4">
+                    <p className="text-sm opacity-70 leading-relaxed">{alignmentRoles[activeAlignmentRole].friction}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Operating cadence */}
+          <div className="mt-8 bg-[#1A1A1A] rounded-3xl p-8 border-2 border-[#1A1A1A]">
+            <div className="font-display font-black text-2xl mb-3">The GTM operating cadence</div>
+            <p className="opacity-80 mb-6">Alignment is not a one-time meeting. It's a ritual. The best PMMs run a weekly GTM sync, a monthly market briefing, and a quarterly category review. Show up consistently and you become the room where decisions get made.</p>
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-[#FFFAF0]/5 rounded-2xl p-5">
                 <div className="text-xs font-bold tracking-wider opacity-50 mb-2">WEEKLY</div>
@@ -853,7 +1070,10 @@ export default function GTMMastery() {
                 <button key={t.name} onClick={() => setActiveModal({ type: 'tool', tool: t })} className="neo-card text-left border-2 border-[#1A1A1A] rounded-2xl p-5 bg-white hover:bg-[#FFB627]/20">
                   <div className="flex items-start justify-between mb-3 gap-2">
                     <div className="font-display font-black text-xl">{t.name}</div>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${t.tier === 'Essential' ? 'bg-[#00B86B] text-[#1A1A1A]' : 'bg-[#7B5CFF] text-[#FFFAF0]'}`}>{t.tier}</span>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${t.tier === 'Essential' ? 'bg-[#00B86B] text-[#1A1A1A]' : 'bg-[#7B5CFF] text-[#FFFAF0]'}`}>{t.tier}</span>
+                      {t.category === 'Validation' && <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#FF5C39] text-[#FFFAF0]">Validation</span>}
+                    </div>
                   </div>
                   <div className="text-xs font-semibold text-[#FF5C39] mb-2">{t.category}</div>
                   <p className="text-sm mb-4 text-[#1A1A1A]/70 leading-snug">{t.desc}</p>
@@ -878,8 +1098,6 @@ export default function GTMMastery() {
       <section id="skills" className="bg-[#1A1A1A] text-[#FFFAF0] py-24 border-y-2 border-[#1A1A1A]">
         <div className="max-w-7xl mx-auto px-6">
           <ModuleHeader num="06" label="AI-Powered Workflows" title="Skills Library" subtitle="Eight Claude Skills that turn this playbook into repeatable AI workflows. Install once, run forever." dark />
-
-          {/* Bulk download card */}
           <div className="mt-12 bg-gradient-to-br from-[#7B5CFF] to-[#FF5C39] rounded-3xl p-8 md:p-10 border-2 border-[#FFFAF0]">
             <div className="grid md:grid-cols-3 gap-6 items-center">
               <div className="md:col-span-2">
@@ -898,8 +1116,6 @@ export default function GTMMastery() {
               </div>
             </div>
           </div>
-
-          {/* Skills grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
             {skills.map((s) => {
               const Icon = s.icon;
@@ -918,8 +1134,6 @@ export default function GTMMastery() {
               );
             })}
           </div>
-
-          {/* How to use callout */}
           <div className="mt-12 grid md:grid-cols-3 gap-4">
             <div className="bg-[#FFFAF0]/5 rounded-2xl p-5 border-2 border-[#FFFAF0]/10">
               <div className="text-xs font-bold tracking-wider text-[#FFB627] mb-2">STEP 1</div>
@@ -939,7 +1153,6 @@ export default function GTMMastery() {
           </div>
         </div>
       </section>
-
 
       {/* MODULE 07 - DO'S & DON'TS */}
       <section id="dosdonts" className="max-w-7xl mx-auto px-6 py-24">
@@ -966,10 +1179,10 @@ export default function GTMMastery() {
         </div>
       </section>
 
-      {/* MODULE 09 - METRICS */}
+      {/* MODULE 08 - METRICS (kept in place, impact moved up) */}
       <section id="metrics" className="bg-[#1A1A1A] text-[#FFFAF0] py-24 border-y-2 border-[#1A1A1A]">
         <div className="max-w-7xl mx-auto px-6">
-          <ModuleHeader num="09" label="What Counts" title="Metrics That Matter" subtitle="Measure what moves the business, not what looks good in a deck." dark />
+          <ModuleHeader num="08" label="What Counts" title="Metrics That Matter" subtitle="Measure what moves the business, not what looks good in a deck." dark />
           <div className="grid md:grid-cols-3 gap-6 mt-16">
             {[
               { phase: 'Pre-Launch', timing: 'T-8 to T-0', color: '#FFB627', metrics: [['ICP Definition Score', 'Are you targeting the right buyers?'],['Message Resonance %', 'Wynter test score >70% = green light'],['Sales Enablement Readiness', '% of reps certified on messaging'],['Launch Checklist Completion', '100% = launch-ready']] },
@@ -990,56 +1203,12 @@ export default function GTMMastery() {
               </div>
             ))}
           </div>
-          <div className="mt-16 bg-[#FFFAF0]/5 rounded-3xl p-6 md:p-8 border-2 border-[#FFFAF0]/10">
-            <h4 className="font-display font-black text-2xl md:text-3xl mb-2">Impact: Without vs. With a Structured GTM</h4>
-            <p className="text-sm opacity-60 mb-2">Industry benchmarks comparing teams without a defined GTM system vs. teams running this playbook.</p>
-            <p className="text-xs opacity-50 mb-8 font-mono">Sources: Forrester (2024), Gong (2024), OpenView PLG benchmarks (2024)</p>
-            <div className="space-y-8">
-              {[
-                { name: 'Win Rate', without: 18, with: 32, unit: '%', max: 100, context: 'A 14-point lift means almost doubling closed-won deals from the same pipeline.' },
-                { name: 'Sales Cycle', without: 95, with: 58, unit: ' days', max: 120, invert: true, context: '37 days faster means more deals per rep per year, same headcount.' },
-                { name: 'Pipeline Coverage', without: 2.1, with: 3.8, unit: 'x', max: 5, context: 'Coverage ratio above 3x is the threshold most boards expect for predictable revenue.' },
-                { name: 'Activation Rate', without: 24, with: 51, unit: '%', max: 100, context: 'Activation drives every downstream metric: retention, expansion, advocacy.' },
-                { name: 'Net Revenue Retention', without: 95, with: 118, unit: '%', max: 150, context: 'NRR above 110% means you grow even if you stop acquiring new logos.' },
-              ].map((m, i) => {
-                const delta = m.invert ? `${Math.round(((m.without - m.with) / m.without) * 100)}% faster` : `+${Math.round(((m.with - m.without) / m.without) * 100)}%`;
-                const positive = m.invert ? m.with < m.without : m.with > m.without;
-                return (
-                  <div key={i}>
-                    <div className="flex justify-between items-baseline mb-2">
-                      <span className="font-semibold">{m.name}</span>
-                      <span className="text-sm font-bold" style={{ color: positive ? '#00B86B' : '#FF3E7F' }}>{delta}</span>
-                    </div>
-                    <div className="space-y-2 mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-20 text-xs opacity-60 flex-shrink-0">Without</div>
-                        <div className="flex-1 h-7 bg-[#FFFAF0]/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#FF3E7F] rounded-full flex items-center justify-end pr-3 transition-all" style={{ width: `${Math.min((m.without / m.max) * 100, 100)}%` }}>
-                            <span className="text-xs font-bold">{m.without}{m.unit}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-20 text-xs opacity-60 flex-shrink-0">With GTM</div>
-                        <div className="flex-1 h-7 bg-[#FFFAF0]/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#00B86B] rounded-full flex items-center justify-end pr-3 transition-all" style={{ width: `${Math.min((m.with / m.max) * 100, 100)}%` }}>
-                            <span className="text-xs font-bold text-[#1A1A1A]">{m.with}{m.unit}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-xs opacity-60 italic pl-23">{m.context}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* MODULE 10 - CHECKLIST */}
+      {/* MODULE 09 - CHECKLIST */}
       <section id="checklist" className="max-w-7xl mx-auto px-6 py-24">
-        <ModuleHeader num="10" label="Pre-Flight Routine" title="The GTM Launch Checklist" subtitle="Click any item for an AI prompt you can paste into Claude to personalize it to your launch. Progress saves automatically." />
+        <ModuleHeader num="09" label="Pre-Flight Routine" title="The GTM Launch Checklist" subtitle="Click any item for an AI prompt you can paste into Claude to personalize it to your launch. Progress saves automatically." />
         <div className="grid lg:grid-cols-12 gap-8 mt-16 items-start">
           <div className="lg:col-span-4">
             <div className="bg-[#1A1A1A] text-[#FFFAF0] rounded-3xl p-8 border-2 border-[#1A1A1A]">
@@ -1095,7 +1264,6 @@ export default function GTMMastery() {
                   {phase.items.map((item, j) => {
                     const id = `${i}-${j}`;
                     const done = checklistState[id];
-                    const promptId = `prompt-${i}-${j}`;
                     return (
                       <div key={j} className="rounded-2xl hover:bg-[#FFFAF0] transition-colors">
                         <div className="flex items-start gap-4 p-4">
@@ -1127,10 +1295,10 @@ export default function GTMMastery() {
         </div>
       </section>
 
-      {/* MODULE 11 - MANIFESTO */}
+      {/* MODULE 10 - MANIFESTO */}
       <section id="manifesto" className="bg-[#1A1A1A] text-[#FFFAF0] py-24 border-t-2 border-[#1A1A1A]">
         <div className="max-w-7xl mx-auto px-6">
-          <ModuleHeader num="11" label="The Principles" title="Your GTM North Star" subtitle="The principles that guide the best PMMs in the world." dark />
+          <ModuleHeader num="10" label="The Principles" title="Your GTM North Star" subtitle="The principles that guide the best PMMs in the world." dark />
           <div className="grid md:grid-cols-2 gap-4 mt-16">
             {principles.map((p, i) => (
               <div key={i} className="bg-[#FFFAF0]/5 border-2 border-[#FFFAF0]/10 rounded-2xl p-6 hover:bg-[#FFFAF0]/10 transition-colors">
@@ -1190,13 +1358,14 @@ export default function GTMMastery() {
               )}
               {activeModal === 'toolkit-tip' && (
                 <div className="space-y-4">
-                  <p className="text-lg leading-relaxed text-[#1A1A1A]">Don't try to use all these tools at once. Start with three that cover the highest-leverage parts of the job:</p>
+                  <p className="text-lg leading-relaxed text-[#1A1A1A]">Don't try to use all these tools at once. Start with four that cover the highest-leverage parts of the job:</p>
                   <ul className="space-y-2">
-                    <li className="flex gap-3"><span className="font-bold w-24 text-[#1A1A1A]">Dovetail</span><span className="text-sm text-[#1A1A1A]/70">customer research</span></li>
-                    <li className="flex gap-3"><span className="font-bold w-24 text-[#1A1A1A]">Wynter</span><span className="text-sm text-[#1A1A1A]/70">message testing</span></li>
-                    <li className="flex gap-3"><span className="font-bold w-24 text-[#1A1A1A]">Gong</span><span className="text-sm text-[#1A1A1A]/70">sales intelligence</span></li>
+                    <li className="flex gap-3"><span className="font-bold w-28 text-[#1A1A1A]">Dovetail</span><span className="text-sm text-[#1A1A1A]/70">customer research</span></li>
+                    <li className="flex gap-3"><span className="font-bold w-28 text-[#1A1A1A]">Perplexity</span><span className="text-sm text-[#1A1A1A]/70">real-time market validation</span></li>
+                    <li className="flex gap-3"><span className="font-bold w-28 text-[#1A1A1A]">Wynter</span><span className="text-sm text-[#1A1A1A]/70">message testing</span></li>
+                    <li className="flex gap-3"><span className="font-bold w-28 text-[#1A1A1A]">Gong</span><span className="text-sm text-[#1A1A1A]/70">sales intelligence</span></li>
                   </ul>
-                  <p className="text-sm leading-relaxed text-[#1A1A1A]">These three alone will transform your GTM quality. Add others as your team scales.</p>
+                  <p className="text-sm leading-relaxed text-[#1A1A1A]">These four alone will transform your GTM quality. Add others as your team scales.</p>
                   <div className="bg-[#1A1A1A] text-[#FFFAF0] p-4 rounded-xl mt-4">
                     <div className="text-xs font-bold tracking-wider text-[#FFB627] mb-1">INVESTMENT</div>
                     <div className="font-display font-black text-xl">~$500 to $1K/month</div>
@@ -1207,8 +1376,7 @@ export default function GTMMastery() {
               {typeof activeModal === 'object' && activeModal?.type === 'do' && (
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00B86B] text-[#1A1A1A] font-bold text-xs tracking-wider mb-5">
-                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
-                    DO THIS
+                    <Check className="w-3.5 h-3.5" strokeWidth={3} />DO THIS
                   </div>
                   <h3 className="font-display font-black text-3xl mb-5 text-[#1A1A1A] leading-tight">{activeModal.item.title}</h3>
                   <p className="text-lg leading-relaxed mb-6 text-[#1A1A1A] font-medium">{activeModal.item.body}</p>
@@ -1221,8 +1389,7 @@ export default function GTMMastery() {
               {typeof activeModal === 'object' && activeModal?.type === 'dont' && (
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FF3E7F] text-[#FFFAF0] font-bold text-xs tracking-wider mb-5">
-                    <X className="w-3.5 h-3.5" strokeWidth={3} />
-                    AVOID THIS
+                    <X className="w-3.5 h-3.5" strokeWidth={3} />AVOID THIS
                   </div>
                   <h3 className="font-display font-black text-3xl mb-5 text-[#1A1A1A] leading-tight">{activeModal.item.title}</h3>
                   <p className="text-lg leading-relaxed mb-6 text-[#1A1A1A] font-medium">{activeModal.item.body}</p>
@@ -1262,8 +1429,6 @@ export default function GTMMastery() {
                     <div className="text-xs font-bold tracking-wider mb-2" style={{ color: activeModal.element.color }}>ELEMENT {activeModal.element.number}</div>
                     <h3 className="font-display font-black text-3xl mb-3">{activeModal.element.title}</h3>
                   </div>
-
-                  {/* Template */}
                   <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <FileText className="w-5 h-5" style={{ color: activeModal.element.color }} />
@@ -1283,14 +1448,10 @@ export default function GTMMastery() {
                       ))}
                     </div>
                   </div>
-
-                  {/* Where to get data */}
                   <div className="bg-[#1A1A1A] text-[#FFFAF0] p-5 rounded-2xl">
                     <div className="text-xs font-bold tracking-wider text-[#FFB627] mb-2">WHERE TO GET THE DATA</div>
                     <p className="text-sm leading-relaxed">{activeModal.element.sources}</p>
                   </div>
-
-                  {/* AI Prompt */}
                   <div className="border-2 border-[#7B5CFF] rounded-2xl p-5 bg-white">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -1304,8 +1465,6 @@ export default function GTMMastery() {
                     </div>
                     <pre className="font-mono text-xs leading-relaxed whitespace-pre-wrap bg-[#1A1A1A] text-[#FFFAF0] p-4 rounded-lg">{activeModal.element.prompt}</pre>
                   </div>
-
-                  {/* Resources */}
                   <div>
                     <div className="text-xs font-bold tracking-wider text-[#1A1A1A] mb-3">GO DEEPER</div>
                     <div className="space-y-2">
@@ -1357,72 +1516,6 @@ export default function GTMMastery() {
                       <p className="text-sm text-[#1A1A1A]/80">{activeModal.skill.tagline}</p>
                     </div>
                   </div>
-
-                  <div className="grid sm:grid-cols-3 gap-3">
-                    <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-4">
-                      <div className="text-xs font-bold tracking-wider mb-2" style={{ color: activeModal.skill.color }}>WHAT YOU PROVIDE</div>
-                      <p className="text-sm text-[#1A1A1A] leading-relaxed">{activeModal.skill.input}</p>
-                    </div>
-                    <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-4">
-                      <div className="text-xs font-bold tracking-wider mb-2" style={{ color: activeModal.skill.color }}>WHAT YOU GET</div>
-                      <p className="text-sm text-[#1A1A1A] leading-relaxed">{activeModal.skill.output}</p>
-                    </div>
-                    <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-4">
-                      <div className="text-xs font-bold tracking-wider mb-2" style={{ color: activeModal.skill.color }}>WHEN TO USE</div>
-                      <p className="text-sm text-[#1A1A1A] leading-relaxed">{activeModal.skill.whenToUse}</p>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#1A1A1A] text-[#FFFAF0] rounded-2xl p-5">
-                    <div className="text-xs font-bold tracking-wider text-[#FFB627] mb-3">QUICK INSTALL</div>
-                    <ol className="space-y-2 text-sm">
-                      <li className="flex gap-3">
-                        <span className="font-mono font-bold text-[#FFB627] flex-shrink-0">1.</span>
-                        <span>Download the .md file using the button below</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="font-mono font-bold text-[#FFB627] flex-shrink-0">2.</span>
-                        <span>In Claude.ai: create a Project → add file to Project Knowledge. Or in Claude Code: drop it in <code className="font-mono text-xs bg-[#FFFAF0]/10 px-1 py-0.5 rounded">~/.claude/skills/</code></span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="font-mono font-bold text-[#FFB627] flex-shrink-0">3.</span>
-                        <span>Start a chat with your context (interviews, data, the brief) and Claude triggers the skill automatically</span>
-                      </li>
-                    </ol>
-                  </div>
-
-                  <a href={`/skills/${activeModal.skill.id}.md`} download className="w-full bg-[#1A1A1A] text-[#FFFAF0] rounded-2xl p-4 flex items-center justify-between hover:bg-[#FF5C39] transition-colors">
-                    <div className="flex items-center gap-3">
-                      <Download className="w-5 h-5" />
-                      <div className="text-left">
-                        <div className="font-semibold">Download {activeModal.skill.id}.md</div>
-                        <div className="text-xs opacity-70">Drop into Claude and you're ready to go</div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5" />
-                  </a>
-
-                  <div className="bg-[#FFB627] p-4 rounded-2xl border-2 border-[#1A1A1A]">
-                    <div className="text-xs font-bold tracking-wider text-[#1A1A1A] mb-1">TIP</div>
-                    <p className="text-sm text-[#1A1A1A]">Skills work best when you've gathered your raw inputs first. Don't ask the skill to do strategy AND tactical drafting in one shot. Use it for the tactical conversion.</p>
-                  </div>
-                </div>
-              )}
-              {typeof activeModal === 'object' && activeModal?.type === 'skill' && (
-                <div className="space-y-5">
-                  <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: activeModal.skill.color }}>
-                        {React.createElement(activeModal.skill.icon, { className: "w-6 h-6 text-[#1A1A1A]" })}
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold tracking-wider" style={{ color: activeModal.skill.color }}>{activeModal.skill.element.toUpperCase()}</div>
-                        <h3 className="font-display font-black text-2xl text-[#1A1A1A]">{activeModal.skill.title}</h3>
-                      </div>
-                    </div>
-                    <p className="text-base text-[#1A1A1A] font-medium">{activeModal.skill.tagline}</p>
-                  </div>
-
                   <div className="grid grid-cols-1 gap-3">
                     <div className="bg-white border-2 border-[#1A1A1A] rounded-2xl p-4">
                       <div className="text-xs font-bold tracking-wider mb-1" style={{ color: activeModal.skill.color }}>WHAT YOU PUT IN</div>
@@ -1437,7 +1530,6 @@ export default function GTMMastery() {
                       <p className="text-sm text-[#1A1A1A]">{activeModal.skill.whenToUse}</p>
                     </div>
                   </div>
-
                   <div className="flex flex-col sm:flex-row gap-3">
                     <a href={`/skills/${activeModal.skill.id}.md`} download={`${activeModal.skill.id}.md`} className="flex-1 bg-[#1A1A1A] text-[#FFFAF0] px-5 py-3 rounded-full font-semibold text-center hover:bg-[#FF5C39] transition-colors inline-flex items-center justify-center gap-2">
                       <Download className="w-4 h-4" />
@@ -1448,12 +1540,10 @@ export default function GTMMastery() {
                       Get all 8 (.zip)
                     </a>
                   </div>
-
                   <div>
                     <div className="text-xs font-bold tracking-wider text-[#1A1A1A] mb-2">PREVIEW</div>
                     <pre className="font-mono text-xs leading-relaxed whitespace-pre-wrap bg-[#1A1A1A] text-[#FFFAF0] p-4 rounded-lg max-h-96 overflow-y-auto">{skillLoading ? 'Loading...' : (skillContent[activeModal.skill.id] || 'Click download to see the full skill.')}</pre>
                   </div>
-
                   <div className="bg-[#FFB627] p-4 rounded-2xl border-2 border-[#1A1A1A]">
                     <div className="text-xs font-bold tracking-wider text-[#1A1A1A] mb-1">HOW TO INSTALL</div>
                     <p className="text-sm text-[#1A1A1A] mb-2"><strong>Claude.ai:</strong> Create a Project, upload the .md file to its knowledge.</p>
