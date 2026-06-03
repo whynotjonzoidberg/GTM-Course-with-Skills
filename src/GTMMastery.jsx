@@ -684,7 +684,7 @@ export default function GTMMastery() {
                   {/* Metric name */}
                   <div className="text-center">
                     <div className="font-display font-bold text-sm leading-tight mb-1">{m.name}</div>
-                    <p className="text-xs opacity-40 leading-snug hidden md:block">{m.context}</p>
+                    <p className="text-xs opacity-80 leading-snug hidden md:block">{m.context}</p>
                   </div>
                 </div>
               );
@@ -702,7 +702,7 @@ export default function GTMMastery() {
             ].map((m, i) => (
               <div key={i} className="bg-[#FFFAF0]/5 border border-[#FFFAF0]/10 rounded-xl p-4">
                 <div className="font-semibold text-sm mb-1">{m.name}</div>
-                <p className="text-xs opacity-50 leading-relaxed">{m.context}</p>
+                <p className="text-xs opacity-80 leading-relaxed">{m.context}</p>
               </div>
             ))}
           </div>
