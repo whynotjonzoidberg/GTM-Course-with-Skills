@@ -586,11 +586,10 @@ export default function GTMMastery() {
           </div>
           <h1 className="font-display font-black text-6xl md:text-8xl lg:text-9xl leading-[0.9] mb-8">
             The path to<br/>
-            GTM <span className="italic" style={{ color: '#FF5C39' }}>mastery</span><br/>
-            <span className="text-outline">is built.</span>
+            GTM <span className="italic" style={{ color: '#FF5C39' }}>mastery</span>
           </h1>
           <p className="text-xl md:text-2xl max-w-2xl mb-10 text-[#1A1A1A]/70 leading-relaxed">
-            GTM mastery isn't a moment — it's a system you build and sharpen with every launch. The complete playbook for PMMs: frameworks, tools, AI prompts, and the metrics that move the business.
+            The complete playbook for PMMs: frameworks, tools, AI prompts, and the metrics that move the business.
           </p>
           <div className="flex flex-wrap gap-4 mb-16">
             <button onClick={() => scrollTo('intro')} className="bg-[#1A1A1A] text-[#FFFAF0] px-8 py-4 rounded-full font-semibold hover:bg-[#FF5C39] transition-colors flex items-center gap-2">
@@ -601,19 +600,12 @@ export default function GTMMastery() {
             </button>
           </div>
 
-          <div className="mb-4 text-xs font-bold tracking-wider opacity-60">WHY MOST LAUNCHES UNDERPERFORM</div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { stat: '50%', label: "of launches don't hit their targets", src: 'McKinsey, 2017' },
-              { stat: '45%', label: 'of product launches underperform expectations', src: 'McKinsey, 2023' },
-              { stat: '3x', label: 'higher revenue impact with GTM aligned to roadmap', src: 'Gartner, 2023' },
-            ].map((s, i) => (
-              <div key={i} className="bg-[#1A1A1A] text-[#FFFAF0] p-6 rounded-2xl border-2 border-[#1A1A1A]">
-                <div className="font-display font-black text-6xl mb-2" style={{ color: ['#FF5C39','#7B5CFF','#FFB627'][i] }}>{s.stat}</div>
-                <div className="text-sm leading-snug mb-2">{s.label}</div>
-                <div className="text-xs text-[#FFFAF0]/50">{s.src}</div>
-              </div>
-            ))}
+
+          <div className="flex justify-end mt-8">
+            <div className="text-right">
+              <div className="text-xs font-bold tracking-wider opacity-50 mb-1">CREATED BY</div>
+              <div className="font-display font-black text-2xl md:text-3xl">Gili Idan &amp; Gaby Avner</div>
+            </div>
           </div>
         </div>
       </section>
@@ -1208,7 +1200,7 @@ export default function GTMMastery() {
 
       {/* MODULE 09 - CHECKLIST */}
       <section id="checklist" className="max-w-7xl mx-auto px-6 py-24">
-        <ModuleHeader num="09" label="Pre-Flight Routine" title="The GTM Launch Checklist" subtitle="Click any item for an AI prompt you can paste into Claude to personalize it to your launch. Progress saves automatically." />
+        <ModuleHeader num="09" label="Pre-Flight Routine" title="The GTM Complete Checklist" subtitle="Click any item for an AI prompt you can paste into Claude to personalize it to your launch. Progress saves automatically." />
         <div className="grid lg:grid-cols-12 gap-8 mt-16 items-start">
           <div className="lg:col-span-4">
             <div className="bg-[#1A1A1A] text-[#FFFAF0] rounded-3xl p-8 border-2 border-[#1A1A1A]">
